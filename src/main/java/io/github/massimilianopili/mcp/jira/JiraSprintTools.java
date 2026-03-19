@@ -25,11 +25,11 @@ public class JiraSprintTools {
     }
 
     @ReactiveTool(name = "jira_list_sprints",
-          description = "Elenca gli sprint di una board Jira. Filtrabile per stato (future, active, closed).")
+          description = "Lists sprints of a Jira board. Filterable by state (future, active, closed).")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> listSprints(
-            @ToolParam(description = "ID numerico della board") int boardId,
-            @ToolParam(description = "Stato sprint: future, active, closed (tutti se omesso)", required = false)
+            @ToolParam(description = "Numeric board ID") int boardId,
+            @ToolParam(description = "Sprint state: future, active, closed (all if omitted)", required = false)
             String state) {
 
         String uri = props.getAgileUrl() + "/board/" + boardId + "/sprint";
@@ -64,10 +64,10 @@ public class JiraSprintTools {
     }
 
     @ReactiveTool(name = "jira_get_sprint",
-          description = "Recupera i dettagli di uno sprint per ID")
+          description = "Retrieves details of a sprint by ID")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getSprint(
-            @ToolParam(description = "ID numerico dello sprint") int sprintId) {
+            @ToolParam(description = "Numeric sprint ID") int sprintId) {
         return webClient.get()
                 .uri(props.getAgileUrl() + "/sprint/" + sprintId)
                 .retrieve()
@@ -77,12 +77,12 @@ public class JiraSprintTools {
     }
 
     @ReactiveTool(name = "jira_get_sprint_issues",
-          description = "Recupera le issue associate a uno sprint specifico")
+          description = "Retrieves issues associated with a specific sprint")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getSprintIssues(
-            @ToolParam(description = "ID numerico dello sprint") int sprintId,
-            @ToolParam(description = "Indice di partenza (default 0)", required = false) Integer startAt,
-            @ToolParam(description = "Numero massimo risultati (default 50)", required = false) Integer maxResults) {
+            @ToolParam(description = "Numeric sprint ID") int sprintId,
+            @ToolParam(description = "Start index (default 0)", required = false) Integer startAt,
+            @ToolParam(description = "Maximum number of results (default 50)", required = false) Integer maxResults) {
 
         StringBuilder uri = new StringBuilder(props.getAgileUrl() + "/sprint/" + sprintId + "/issue?");
         if (startAt != null) uri.append("startAt=").append(startAt).append("&");
@@ -97,12 +97,12 @@ public class JiraSprintTools {
     }
 
     @ReactiveTool(name = "jira_get_backlog_issues",
-          description = "Recupera le issue nel backlog di una board (non assegnate a nessuno sprint)")
+          description = "Retrieves issues in a board's backlog (not assigned to any sprint)")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getBacklogIssues(
-            @ToolParam(description = "ID numerico della board") int boardId,
-            @ToolParam(description = "Indice di partenza (default 0)", required = false) Integer startAt,
-            @ToolParam(description = "Numero massimo risultati (default 50)", required = false) Integer maxResults) {
+            @ToolParam(description = "Numeric board ID") int boardId,
+            @ToolParam(description = "Start index (default 0)", required = false) Integer startAt,
+            @ToolParam(description = "Maximum number of results (default 50)", required = false) Integer maxResults) {
 
         StringBuilder uri = new StringBuilder(props.getAgileUrl() + "/board/" + boardId + "/backlog?");
         if (startAt != null) uri.append("startAt=").append(startAt).append("&");

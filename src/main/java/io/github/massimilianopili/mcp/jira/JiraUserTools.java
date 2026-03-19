@@ -25,7 +25,7 @@ public class JiraUserTools {
     }
 
     @ReactiveTool(name = "jira_get_current_user",
-          description = "Recupera le informazioni dell'utente corrente (account ID, email, display name)")
+          description = "Retrieves current user information (account ID, email, display name)")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getCurrentUser() {
         return webClient.get()
@@ -46,11 +46,11 @@ public class JiraUserTools {
     }
 
     @ReactiveTool(name = "jira_search_users",
-          description = "Cerca utenti Jira per nome, email o username. Utile per trovare l'account ID da usare nell'assegnazione issue.")
+          description = "Searches Jira users by name, email or username. Useful for finding the account ID to use in issue assignment.")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> searchUsers(
-            @ToolParam(description = "Query di ricerca (nome, email o username)") String query,
-            @ToolParam(description = "Numero massimo risultati (default 25)", required = false)
+            @ToolParam(description = "Search query (name, email or username)") String query,
+            @ToolParam(description = "Maximum number of results (default 25)", required = false)
             Integer maxResults) {
 
         String uri = props.getRestUrl() + "/user/search?query=" + query;

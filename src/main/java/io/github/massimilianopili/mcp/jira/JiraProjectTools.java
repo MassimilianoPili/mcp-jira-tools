@@ -25,7 +25,7 @@ public class JiraProjectTools {
     }
 
     @ReactiveTool(name = "jira_list_projects",
-          description = "Elenca tutti i progetti Jira accessibili all'utente corrente")
+          description = "Lists all Jira projects accessible to the current user")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> listProjects() {
         return webClient.get()
@@ -46,10 +46,10 @@ public class JiraProjectTools {
     }
 
     @ReactiveTool(name = "jira_get_project",
-          description = "Recupera i dettagli di un progetto Jira per chiave (es. MCP)")
+          description = "Retrieves details of a Jira project by key (e.g. MCP)")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getProject(
-            @ToolParam(description = "Chiave del progetto, es: MCP") String projectKey) {
+            @ToolParam(description = "Project key, e.g.: MCP") String projectKey) {
         return webClient.get()
                 .uri(props.getRestUrl() + "/project/" + projectKey)
                 .retrieve()
@@ -59,7 +59,7 @@ public class JiraProjectTools {
     }
 
     @ReactiveTool(name = "jira_list_issue_types",
-          description = "Elenca tutti i tipi di issue disponibili nell'istanza Jira (Story, Task, Bug, Epic, Sub-task, ecc.)")
+          description = "Lists all issue types available in the Jira instance (Story, Task, Bug, Epic, Sub-task, etc.)")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> listIssueTypes() {
         return webClient.get()
@@ -79,7 +79,7 @@ public class JiraProjectTools {
     }
 
     @ReactiveTool(name = "jira_list_priorities",
-          description = "Elenca le priorita' disponibili (Highest, High, Medium, Low, Lowest)")
+          description = "Lists available priorities (Highest, High, Medium, Low, Lowest)")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> listPriorities() {
         return webClient.get()
@@ -98,7 +98,7 @@ public class JiraProjectTools {
     }
 
     @ReactiveTool(name = "jira_list_statuses",
-          description = "Elenca tutti gli stati disponibili nell'istanza Jira (To Do, In Progress, Done, ecc.)")
+          description = "Lists all statuses available in the Jira instance (To Do, In Progress, Done, etc.)")
     @SuppressWarnings("unchecked")
     public Mono<List<Map<String, Object>>> listStatuses() {
         return webClient.get()

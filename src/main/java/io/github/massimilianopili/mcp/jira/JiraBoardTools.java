@@ -25,12 +25,12 @@ public class JiraBoardTools {
     }
 
     @ReactiveTool(name = "jira_list_boards",
-          description = "Elenca le board Jira (Scrum e Kanban). Filtrabile per nome o progetto.")
+          description = "Lists Jira boards (Scrum and Kanban). Filterable by name or project.")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> listBoards(
-            @ToolParam(description = "Filtra per nome board (parziale)", required = false) String name,
-            @ToolParam(description = "Filtra per chiave progetto", required = false) String projectKeyOrId,
-            @ToolParam(description = "Tipo board: scrum, kanban, simple", required = false) String type) {
+            @ToolParam(description = "Filter by board name (partial match)", required = false) String name,
+            @ToolParam(description = "Filter by project key", required = false) String projectKeyOrId,
+            @ToolParam(description = "Board type: scrum, kanban, simple", required = false) String type) {
 
         StringBuilder uri = new StringBuilder(props.getAgileUrl() + "/board?");
         if (name != null && !name.isBlank()) {
@@ -72,10 +72,10 @@ public class JiraBoardTools {
     }
 
     @ReactiveTool(name = "jira_get_board",
-          description = "Recupera i dettagli di una board Jira per ID")
+          description = "Retrieves details of a Jira board by ID")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getBoard(
-            @ToolParam(description = "ID numerico della board") int boardId) {
+            @ToolParam(description = "Numeric board ID") int boardId) {
         return webClient.get()
                 .uri(props.getAgileUrl() + "/board/" + boardId)
                 .retrieve()
@@ -85,10 +85,10 @@ public class JiraBoardTools {
     }
 
     @ReactiveTool(name = "jira_get_board_configuration",
-          description = "Recupera la configurazione di una board: colonne, filtro, stima, ranking")
+          description = "Retrieves a board's configuration: columns, filter, estimation, ranking")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getBoardConfiguration(
-            @ToolParam(description = "ID numerico della board") int boardId) {
+            @ToolParam(description = "Numeric board ID") int boardId) {
         return webClient.get()
                 .uri(props.getAgileUrl() + "/board/" + boardId + "/configuration")
                 .retrieve()

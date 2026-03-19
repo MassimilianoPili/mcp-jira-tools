@@ -26,15 +26,15 @@ public class JiraIssueTools {
     }
 
     @ReactiveTool(name = "jira_search_issues",
-          description = "Cerca issue Jira con JQL (Jira Query Language). "
-                      + "Restituisce issue con campi principali. Massimo 50 risultati per pagina.")
+          description = "Searches Jira issues with JQL (Jira Query Language). "
+                      + "Returns issues with main fields. Maximum 50 results per page.")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> searchIssues(
-            @ToolParam(description = "Query JQL, es: project = MCP AND status = 'In Progress' ORDER BY priority DESC")
+            @ToolParam(description = "JQL query, e.g.: project = MCP AND status = 'In Progress' ORDER BY priority DESC")
             String jql,
-            @ToolParam(description = "Indice di partenza per paginazione (default 0)", required = false)
+            @ToolParam(description = "Start index for pagination (default 0)", required = false)
             Integer startAt,
-            @ToolParam(description = "Numero massimo risultati (default 50, max 100)", required = false)
+            @ToolParam(description = "Maximum number of results (default 50, max 100)", required = false)
             Integer maxResults) {
 
         Map<String, Object> body = new LinkedHashMap<>();
@@ -67,11 +67,11 @@ public class JiraIssueTools {
     }
 
     @ReactiveTool(name = "jira_get_issue",
-          description = "Recupera una singola issue Jira per chiave (es. MCP-123) con tutti i campi")
+          description = "Retrieves a single Jira issue by key (e.g. MCP-123) with all fields")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getIssue(
-            @ToolParam(description = "Chiave della issue, es: MCP-123") String issueKey,
-            @ToolParam(description = "Campi da espandere: changelog, renderedFields, transitions", required = false)
+            @ToolParam(description = "Issue key, e.g.: MCP-123") String issueKey,
+            @ToolParam(description = "Fields to expand: changelog, renderedFields, transitions", required = false)
             String expand) {
         String uri = props.getRestUrl() + "/issue/" + issueKey;
         if (expand != null && !expand.isBlank()) {
@@ -86,19 +86,19 @@ public class JiraIssueTools {
     }
 
     @ReactiveTool(name = "jira_create_issue",
-          description = "Crea una nuova issue in Jira (Story, Task, Bug, Epic)")
+          description = "Creates a new Jira issue (Story, Task, Bug, Epic)")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> createIssue(
-            @ToolParam(description = "Chiave del progetto, es: MCP") String projectKey,
-            @ToolParam(description = "Tipo issue: Story, Task, Bug, Epic, Sub-task") String issueType,
-            @ToolParam(description = "Titolo/sommario della issue") String summary,
-            @ToolParam(description = "Descrizione (testo semplice, verra' convertito in ADF)", required = false)
+            @ToolParam(description = "Project key, e.g.: MCP") String projectKey,
+            @ToolParam(description = "Issue type: Story, Task, Bug, Epic, Sub-task") String issueType,
+            @ToolParam(description = "Issue summary/title") String summary,
+            @ToolParam(description = "Description (plain text, will be converted to ADF)", required = false)
             String description,
-            @ToolParam(description = "Priorita': Highest, High, Medium, Low, Lowest", required = false)
+            @ToolParam(description = "Priority: Highest, High, Medium, Low, Lowest", required = false)
             String priority,
-            @ToolParam(description = "Assegnatario (account ID Jira)", required = false)
+            @ToolParam(description = "Assignee (Jira account ID)", required = false)
             String assigneeAccountId,
-            @ToolParam(description = "Label separate da virgola", required = false)
+            @ToolParam(description = "Comma-separated labels", required = false)
             String labels) {
 
         Map<String, Object> fields = new LinkedHashMap<>();
@@ -131,15 +131,15 @@ public class JiraIssueTools {
     }
 
     @ReactiveTool(name = "jira_update_issue",
-          description = "Aggiorna i campi di una issue Jira esistente. Specifica solo i campi da modificare.")
+          description = "Updates fields of an existing Jira issue. Only specify the fields to change.")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> updateIssue(
-            @ToolParam(description = "Chiave della issue, es: MCP-123") String issueKey,
-            @ToolParam(description = "Nuovo sommario/titolo", required = false) String summary,
-            @ToolParam(description = "Nuova descrizione (testo semplice)", required = false) String description,
-            @ToolParam(description = "Nuova priorita'", required = false) String priority,
-            @ToolParam(description = "Nuovo assegnatario (account ID)", required = false) String assigneeAccountId,
-            @ToolParam(description = "Nuove label (separate da virgola)", required = false) String labels) {
+            @ToolParam(description = "Issue key, e.g.: MCP-123") String issueKey,
+            @ToolParam(description = "New summary/title", required = false) String summary,
+            @ToolParam(description = "New description (plain text)", required = false) String description,
+            @ToolParam(description = "New priority", required = false) String priority,
+            @ToolParam(description = "New assignee (account ID)", required = false) String assigneeAccountId,
+            @ToolParam(description = "New labels (comma-separated)", required = false) String labels) {
         return Mono.defer(() -> {
             Map<String, Object> fields = new LinkedHashMap<>();
             if (summary != null && !summary.isBlank()) fields.put("summary", summary);
@@ -169,10 +169,10 @@ public class JiraIssueTools {
     }
 
     @ReactiveTool(name = "jira_get_transitions",
-          description = "Recupera le transizioni di stato disponibili per una issue (es. To Do -> In Progress -> Done)")
+          description = "Retrieves available status transitions for an issue (e.g. To Do -> In Progress -> Done)")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getTransitions(
-            @ToolParam(description = "Chiave della issue, es: MCP-123") String issueKey) {
+            @ToolParam(description = "Issue key, e.g.: MCP-123") String issueKey) {
         return webClient.get()
                 .uri(props.getRestUrl() + "/issue/" + issueKey + "/transitions")
                 .retrieve()
@@ -182,12 +182,12 @@ public class JiraIssueTools {
     }
 
     @ReactiveTool(name = "jira_transition_issue",
-          description = "Esegue una transizione di stato su una issue (es. da 'To Do' a 'In Progress'). "
-                      + "Usa jira_get_transitions per ottenere gli ID disponibili.")
+          description = "Performs a status transition on an issue (e.g. from 'To Do' to 'In Progress'). "
+                      + "Use jira_get_transitions to get available IDs.")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> transitionIssue(
-            @ToolParam(description = "Chiave della issue, es: MCP-123") String issueKey,
-            @ToolParam(description = "ID della transizione (numerico, ottenuto da jira_get_transitions)") String transitionId) {
+            @ToolParam(description = "Issue key, e.g.: MCP-123") String issueKey,
+            @ToolParam(description = "Transition ID (numeric, obtained from jira_get_transitions)") String transitionId) {
         return webClient.post()
                 .uri(props.getRestUrl() + "/issue/" + issueKey + "/transitions")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -199,10 +199,10 @@ public class JiraIssueTools {
     }
 
     @ReactiveTool(name = "jira_delete_issue",
-          description = "Elimina una issue Jira. Operazione irreversibile.")
+          description = "Deletes a Jira issue. Irreversible operation.")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> deleteIssue(
-            @ToolParam(description = "Chiave della issue da eliminare, es: MCP-123") String issueKey) {
+            @ToolParam(description = "Issue key to delete, e.g.: MCP-123") String issueKey) {
         return webClient.delete()
                 .uri(props.getRestUrl() + "/issue/" + issueKey)
                 .retrieve()

@@ -26,10 +26,10 @@ public class JiraCommentTools {
     }
 
     @ReactiveTool(name = "jira_list_comments",
-          description = "Elenca i commenti di una issue Jira con autore, data e corpo del testo")
+          description = "Lists comments of a Jira issue with author, date and body text")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> listComments(
-            @ToolParam(description = "Chiave della issue, es: MCP-123") String issueKey) {
+            @ToolParam(description = "Issue key, e.g.: MCP-123") String issueKey) {
         return webClient.get()
                 .uri(props.getRestUrl() + "/issue/" + issueKey + "/comment")
                 .retrieve()
@@ -64,11 +64,11 @@ public class JiraCommentTools {
     }
 
     @ReactiveTool(name = "jira_add_comment",
-          description = "Aggiunge un commento a una issue Jira")
+          description = "Adds a comment to a Jira issue")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> addComment(
-            @ToolParam(description = "Chiave della issue, es: MCP-123") String issueKey,
-            @ToolParam(description = "Testo del commento") String commentText) {
+            @ToolParam(description = "Issue key, e.g.: MCP-123") String issueKey,
+            @ToolParam(description = "Comment text") String commentText) {
 
         Map<String, Object> body = Map.of(
                 "body", Map.of(
@@ -100,12 +100,12 @@ public class JiraCommentTools {
     }
 
     @ReactiveTool(name = "jira_get_changelog",
-          description = "Recupera lo storico delle modifiche di una issue (chi ha cambiato cosa e quando)")
+          description = "Retrieves the change history of an issue (who changed what and when)")
     @SuppressWarnings("unchecked")
     public Mono<Map<String, Object>> getChangelog(
-            @ToolParam(description = "Chiave della issue, es: MCP-123") String issueKey,
-            @ToolParam(description = "Indice di partenza (default 0)", required = false) Integer startAt,
-            @ToolParam(description = "Numero massimo risultati (default 50)", required = false) Integer maxResults) {
+            @ToolParam(description = "Issue key, e.g.: MCP-123") String issueKey,
+            @ToolParam(description = "Start index (default 0)", required = false) Integer startAt,
+            @ToolParam(description = "Maximum number of results (default 50)", required = false) Integer maxResults) {
 
         StringBuilder uri = new StringBuilder(props.getRestUrl() + "/issue/" + issueKey + "/changelog?");
         if (startAt != null) uri.append("startAt=").append(startAt).append("&");
